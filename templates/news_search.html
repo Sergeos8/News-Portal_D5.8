@@ -1,0 +1,56 @@
+{% extends 'flatpages/default.html' %}
+
+{% load custom_filters %}
+
+{% load custom_tags %}
+
+{% block title %}
+News
+{% endblock title %}
+
+{% block content %}
+<h1>Search Results ({{ page_obj.paginator.count }})</h1>
+<h5>Today {% current_time '%d.%m.%Y' %}</h5>
+
+   <form action="" method="get">
+       {{ filterset.form.as_p }}
+       <input type="submit" value="Search" />
+   </form>
+<a href="..">Back to All</a>
+   <hr>
+{% if news_list %}
+    <table>
+        <tr>
+            {% for news in news_list %}
+            <td width="200rem">
+                <a href="../{{ news.pk }}">
+                    <b>{{ news.title|censor }}</b><br/>
+                    <span style="font-size:0.8rem">{{ news.date_created|date:'d.m.Y' }}</span>><br/>
+                    {{ news.text|truncatechars:20|censor }}
+                </a>
+            </td>
+            {% endfor %}
+        </tr>
+    </table>
+{% else %}
+    <h2>No news available</h2>
+{% endif %}
+
+   {% if page_obj.has_previous %}
+       <a href="?{% url_replace page=1 %}">1</a>
+       {% if page_obj.previous_page_number != 1 %}
+           ...
+           <a href="?{% url_replace page=page_obj.previous_page_number %}">{{ page_obj.previous_page_number }}</a>
+       {% endif %}
+   {% endif %}
+
+   {{ page_obj.number }}
+
+   {% if page_obj.has_next %}
+       <a href="?{% url_replace page=page_obj.next_page_number %}">{{ page_obj.next_page_number }}</a>
+       {% if paginator.num_pages != page_obj.next_page_number %}
+           ...
+           <a href="?{% url_replace page=page_obj.paginator.num_pages %}">{{ page_obj.paginator.num_pages }}</a>
+       {% endif %}
+   {% endif %}
+{% endblock content %}

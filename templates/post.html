@@ -1,0 +1,17 @@
+{% extends 'flatpages/default.html' %}
+
+{% load custom_filters %}
+
+{% block title %}
+{{ post.title }}
+{% endblock title %}
+
+{% block content %}
+<h1>{{ post.title|censor }}</h1>
+<span style="font-size:0.8rem">{{ post.date_created|date:'d.m.Y' }}</span><br/>
+{{ post.text|censor }}
+<br/>
+<a href="{{ post.pk }}/edit/">Edit</a> <a href="{{ post.pk }}/delete/">Delete</a>
+<br/><br/>
+<a href="./">Back</a>
+{% endblock content %}
